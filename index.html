@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#26c8a7">
+  <link rel="manifest" href="manifest.json">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div id="app">
+  <header class="header">
+    <div class="header-brand">
+      <span class="brand-icon">💰</span>
+      <h1 class="brand-title">Expense</h1>
+      <span class="brand-subtitle">Tracker</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span id="themeIcon">🌙</span>
+    </button>
+  </header>
+
+  <main class="main">
+    <section class="balance-section" aria-label="Total balance">
+      <div class="balance-card">
+        <p class="balance-label">Total Balance</p>
+        <h2 class="balance-amount" id="balanceAmount">$0.00</h2>
+        <div class="balance-stats">
+          <div class="stat"><span class="stat-label">Income</span><span class="stat-value" id="totalIncome">$0.00</span></div>
+          <div class="stat"><span class="stat-label">Expenses</span><span class="stat-value" id="totalExpenses">$0.00</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-section">
+      <div class="stat-card"><span class="stat-card-icon">📊</span><div><p class="stat-card-label">This Month</p><p class="stat-card-value" id="monthlyTotal">$0.00</p></div></div>
+      <div class="stat-card"><span class="stat-card-icon">📅</span><div><p class="stat-card-label">This Week</p><p class="stat-card-value" id="weeklyTotal">$0.00</p></div></div>
+      <div class="stat-card"><span class="stat-card-icon">🏷️</span><div><p class="stat-card-label">Transactions</p><p class="stat-card-value" id="transactionCount">0</p></div></div>
+    </section>
+
+    <section class="filter-bar" id="filterBar">
+      <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="Search expenses…" autocomplete="off"></div>
+      <select id="filterCategory" class="filter-select"><option value="">All Categories</option><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Entertainment</option><option>Health</option><option>Other</option></select>
+      <select id="sortBy" class="filter-select"><option value="newest">Newest First</option><option value="oldest">Oldest First</option><option value="highest">Highest Amount</option><option value="lowest">Lowest Amount</option></select>
+    </section>
+
+    <section class="category-section" id="categorySection" hidden>
+      <h3 class="section-title">Spending by Category</h3>
+      <div class="category-breakdown" id="categoryBreakdown"></div>
+    </section>
+
+    <section class="recent-section" aria-label="Recent activity">
+      <div class="section-header"><h3 class="section-title">Recent Activity</h3></div>
+      <div class="transaction-list" id="transactionList"></div>
+      <div class="empty-state" id="emptyState" hidden>
+        <span class="empty-icon">📝</span>
+        <p class="empty-text">No expenses yet</p>
+        <p class="empty-subtext">Add your first expense to get started</p>
+      </div>
+    </section>
+  </main>
+
+  <button class="fab" id="fabButton" aria-label="Add expense">+</button>
+
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal" id="addModal">
+      <div class="modal-header"><h3 class="modal-title" id="modalTitle">Add Expense</h3><button class="modal-close" id="modalClose" aria-label="Close">✕</button></div>
+      <form class="expense-form" id="expenseForm">
+        <input type="hidden" id="editId">
+        <div class="form-group"><label for="expenseTitle">Title</label><input type="text" id="expenseTitle" placeholder="e.g. Grocery Shopping" required maxlength="50"></div>
+        <div class="form-group"><label for="expenseAmount">Amount ($)</label><input type="number" id="expenseAmount" step="0.01" min="0.01" required></div>
+        <div class="form-group"><label for="expenseCategory">Category</label><select id="expenseCategory" required><option value="">Select category</option><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Entertainment</option><option>Health</option><option>Other</option></select></div>
+        <div class="form-group"><label for="expenseDate">Date</label><input type="date" id="expenseDate" required></div>
+        <div class="form-actions"><button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button><button type="submit" class="btn btn-primary" id="submitBtn">Add Expense</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteOverlay" hidden>
+    <div class="modal modal-sm">
+      <h3 class="modal-title">Delete Expense?</h3>
+      <p class="modal-body">This action cannot be undone.</p>
+      <div class="form-actions"><button class="btn btn-secondary" id="deleteCancelBtn">Cancel</button><button class="btn btn-danger" id="deleteConfirmBtn">Delete</button></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+</div>
+
+<script src="src/data/format.js"></script>
+<script src="src/data/db.js"></script>
+<script src="src/utils/notifications.js"></script>
+<script src="src/utils/animations.js"></script>
+<script src="src/components/ExpenseForm.js"></script>
+<script src="src/components/ExpenseCard.js"></script>
+<script src="src/components/CategoryChart.js"></script>
+<script src="src/views/Dashboard.js"></script>
+<script src="src/index.js"></script>
+</body>
+</html>
