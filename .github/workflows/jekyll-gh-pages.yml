@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+# Trigger on pushes to the main branch (or any branch you prefer)
+on:
+  push:
+    branches: [ main ]
+permissions:
+  # Required for the pages deployment action
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  # Cancel any in‑progress runs for the same branch
+  group: pages-deploy-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # -----------------------------------------------------------------
+      # 1️⃣ Checkout repository
+      # -----------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # -----------------------------------------------------------------
+      # 2️⃣ (Optional) Install a toolchain if you need a build step.
+      #    For this pure‑HTML/CSS/JS project no build is required,
+      #    but the step is kept for future extensions (e.g. npm run build).
+      # -----------------------------------------------------------------
+      # - name: Set up Node (uncomment if you add a build step later)
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      # -----------------------------------------------------------------
+      # 3️⃣ Upload the site’s static files as an artifact for the deploy step
+      # -----------------------------------------------------------------
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Path to the directory that contains the static site.
+          # Because the project lives at the repo root, we just point to "."
+          path: .
+      # -----------------------------------------------------------------
+      # 4️⃣ Deploy the artifact to GitHub Pages
+      # -----------------------------------------------------------------
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+    # -----------------------------------------------------------------
+    # Optional: output the URL of the deployed site
+    # -----------------------------------------------------------------
+    # environment:
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
